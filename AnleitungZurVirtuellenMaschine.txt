@@ -1,0 +1,364 @@
+= Anleitung für die Installation und grundlegende Bedienung der virtuellen Maschine
+:Author:       {sys:git --no-pager log -1 HEAD --pretty=format:"%an"}
+:Email:        {sys:git --no-pager log -1 HEAD --pretty=format:"%ae"}
+:Date:         {sys:git --no-pager log -1 HEAD --pretty=format:"%ai"}
+:Revision:     {sys:git describe --tags}
+:revremark:    {sys:git --no-pager log -1 HEAD --pretty=format:"%s"}
+:Authorinitials: STI
+:lang:         de
+:icons:
+:iconsdir:    /usr/share/asciidoc/images/icons/
+:numbered:
+:data-uri:
+:sectids!:
+:copyright:    (C) 2015 by Sebastian Stigler
+:ovaimg: Testing_und_Debugging_XXXXXX.ova
+
+
+Es wird vorausgesetzt, dass Sie die virtuelle Maschine zur Vorlesung
+(+{ovaimg}+) bereits heruntergeladen haben. Den
+notwendigen Link finden Sie auf der `moodle`-Seite des Kurses.
+
+Diese Anleitung richtet sich vorwiegend an Windows- (komplette Anleitung) und
+Mac-Nutzer (alles bis auf die vorgestellten Remoteprogramme).
+
+Linux-Nutzer können ebenfalls `VirtualBox` zur Virtualisierung benutzen, haben
+aber die Möglichkeit alternativ `KVM` + 
+http://www.linux-kvm.org[] (am einfachsten zusammen mit dem `Virtual Maschine
+Manager` http://www.virt-manager.org) zu benutzen. Beachten Sie jedoch, dass
+Sie sich unter Linux für eine der beiden Methoden entschieden müssen, da diese
+sich dort tiefer in den Kernel integrieren und sich so gegenseitig
+ausschließen.
+
+== Alternative Virtualisierung für Linux-Nutzer
+
+Haben Sie `kvm` (und `virt-manager`) über das Software-Repository Ihrer
+Distribution installiert, dann können Sie wie folgt.
+
+
+Kommen Sie bei mir im Büro vorbei um die notwendige +qcow2+ Datei zu bekommen.
+
+Benutzen Sie dann diese Datei als Festplatte für eine neue virtuelle Maschine
+mit den folgenden Eckdaten:
+
+* Betriebssystem Ubuntu 12.04
+* genattetes Netzwerk (virtio)
+* IDE Festplattentreiber
+* 768 MB Arbeitsspeicher
+* Audio entfernen
+
+Nach dem Sie dann die virtuelle Maschine gestartet haben, fragen Sie, nachdem
+Sie sich angemeldet haben, mit dem Befehl `ifconfig eth0` die IP-Adresse der
+virtuellen Maschine ab. Sie können dann mittels dieser IP-Adresse via `ssh` auf
+die Maschine zugreifen.
+
+Lediglich beim Webzugriff müssen Sie darauf achten, das der Webserver, anders
+als unten beschrieben, über + 
+http://<IP-Adresse>:80/project[] statt über
+http://127.0.0.1:8001/project[] erreichbar ist. Bei `IPython` müssen Sie
+lediglich statt der IP-Adresse 127.0.0.1 die gerade ermittelte Adresse
+verwenden; am Port (8888) ändert sich hier nichts.
+
+== Installation von `VirtualBox`
+
+Laden Sie sich die neueste Version von `VirtualBox` herunter. Auf der Seite
+https://www.virtualbox.org[] unter 'Downloads' können Sie sich das, für Ihr
+Betriebssystem und Architektur passende, Installationspaket aussuchen.
+
+[IMPORTANT]
+====
+Achten Sie darauf, das sämtliche Downloads auf Ihrem Rechner beendet sind bevor
+Sie mit der Installation beginnen, da während der Installation kurzzeitig alle
+Netzwerkverbindungen getrennt werden.
+====
+
+Für die Installation können Sie die vorgeschlagenen Standardeinstellung des
+Installers verwenden. Einige der mitinstallierten Treiber erfordern eine
+zusätzliche Bestätigung durch den Anwender.
+
+== Import der virtuellen Maschine in VirtualBox
+
+Um die virtuelle Maschine zu importieren starten Sie `VirtualBox` und Klicken
+Sie dort auf 'Datei' -> 'Appliance importieren ...'.
+
+image::VM_import_01.jpg[]
+
+//<<<
+
+Es öffnet sich der Import-Wizard. Klicken Sie auf die Schaltfläche neben dem
+Eingabefeld, navigieren Sie zum Ordner in dem Sie die Datei +{ovaimg}+
+gespeichert haben und wählen diese aus.
+
+image::VM_import_02.jpg[]
+
+<<<
+
+Es öffnet sich nun ein Fenster, in dem Sie die Einstellungen der Appliance
+überprüfen und ändern können. Klicken auf 'Importieren' im die virtuelle
+Maschine zu installieren.
+
+image::VM_import_03.jpg[]
+
+Die virtuelle Maschine steht nun bereit.
+
+//<<<
+
+== Starten der virtuellen Maschine
+
+Um die virtuelle Maschine zu starten wählen Sie diese auf der linken Seite des
+Fensters von `VirtualBox` aus. Mit einem Klick auf die Schaltfläche 'Starten'
+wird die virtuelle Maschine gestartet.
+
+image::VM_start_001.jpg[]
+
+<<<
+
+Beim allerersten Start der virtuellen Maschine werden automatisch einige
+Konfigurationen vorgenommen die ein wenig Zeit in Anspruch nehmen können (max.
+1-2 Min.)
+
+Im Anschluß kommen Sie zum Anmeldebildschirm.
+
+image::VM_start_01.jpg[]
+
+//<<<
+
+Der Benutzername ist 'user' und das Passwort 'abc123'.
+
+image::VM_start_02.jpg[]
+
+Jetzt können Sie in der virtuellen Maschine arbeiten.
+
+<<<
+
+== Remotezugiff
+
+Für den Remotezugriff von einem Windows-Host aus bieten sich für den Austausch
+von Dateien das Programm `WinSCP` http://www.winscp.net[] an. Die nachfolgende
+Beschreibung geht davon aus, dass Sie bei der Installation die
+'Norton-Commander' artige Oberfläche ausgewählt haben.
+
+Wenn Sie nicht über die Konsole von `VirtualBox` auf die virtuelle Maschine
+zugreifen möchten, so können Sie alternativ via `ssh` auf diese zugreifen.
+Hierfür bietet sich das Programm `PuTTY`
+http://www.chiark.greenend.org.uk/~sgtatham/putty[] an. Dieses Programm kommt
+völlig ohne Installation aus und kann direkt gestartet werden.
+
+image::VM_remote_01.jpg[]
+
+Für Mac- und Linux-Hosts können Sie direkt die bekannten Kommandozeilen Tools
+`scp` und `ssh` verwenden.
+
+Im Folgenden wird davon ausgegangen, dass die virtuelle Maschine gestartet ist
+und der Login-Promt angezeigt wird (Sie können, aber müssen nicht, angemeldet
+sein).
+
+//<<<
+
+=== Remotezugriff via WinSCP zum Austausch von Dateien
+
+Nachdem Sie `WinSCP` gestartet haben klicken Sie auf im linken Teil des
+Fensters auf 'Neues Verbindungsziel'  um eine neue Sitzung zu konfigurieren.
+
+image::VM_remote_02.jpg[]
+
+<<<
+
+Wählen Sie als Übertragungsprotokoll 'SCP' aus (dadurch wird der Port
+automatisch auf '22' gestellt), als Rechnername '127.0.0.1' sowie als
+Benutzernamen 'user'. Wenn Sie das Feld für Kennwort ('abc123') frei lassen,
+so werden Sie beim Anmelden nach dem Passwort gefragt.
+
+image::VM_remote_03.jpg[]
+
+Sie können nun entweder direkt auf 'Anmelden' klicken oder
+auf 'Speichern' um einen Eintrag im linken Fensterbereich zu generieren.
+Als Name für die Sitzung schlägt `WinSCP` stehts +<Benutzername>@<Rechnername>+
+vor. Sie können der Sitzung aber auch einen beliebigen, anderslautenden Namen
+geben.
+
+image::VM_remote_031.jpg[]
+
+Nachdem Sie mit 'OK' den Namen bestätigt haben, können Sie mit 'Anmelden' die
+Sitzung starten.
+
+<<<
+
+Bei der ersten Anmeldung bekommen Sie die unten abgebildete Warnung zu sehen.
+Diese Warnung können Sie in diesem Fall bedenkenlos mit 'Ja' wegklicken.
+
+image::VM_remote_04.jpg[]
+
+Wenn Sie bei der Konfiguration das Passwort nicht mit angegeben haben, dann
+öffnet sich jetzt das untenstehende Fenster und wartet auf die Eingabe des
+Selbigen ('abc123'). Anderen falls öffnet sich dieses Fenster nur kurz und Sie
+werden sofort zum Hauptfenster weitergereicht.
+
+image::VM_remote_05.jpg[]
+
+<<<
+
+Das Hauptfenster ist zweigeteilt (wenn Sie bei der Installation oder später, im
+Fenster in dem Sie die Konfiguration der Verbindung vorgenommen haben und
+auf 'Einstellungen' geklickt haben, als Oberfläche die Option '(Norton)
+Commander' gewählt haben).
+
+Auf der linken Seite sehen Sie den Host-Rechner und auf der rechten Seite den
+Remote-Rechner. Über die Drop-Down Menüs können Sie jeweils das Laufwerk
+auswählen und über die restlichen Schaltflächen im Verzeichnisbaum navigieren.
+
+image::VM_remote_06.jpg[]
+
+//<<<
+
+Um Dateien zu kopieren können Sie einfach via Drag-and-Drop von einem Fenster
+ins andere gezogen werden.
+
+In diesem Beispiel wurden die vier Dateien des Host-Rechners aus dem
+Verzeichnis 'C:\Users\01675\Documents\Testing und Debugging' auf den
+Remote-Rechner in das Verzeichnis '/home/student/project' kopiert. Nach dem
+``Drop'' der Drag-and-Drop Aktion öffnet sich der Kopier-Dialog. Sobald Sie auf
+'Kopieren' geklickt haben beginnt der Datentransfer.
+
+image::VM_remote_07.jpg[]
+
+<<<
+
+Nachdem der Transfer beendet ist, können Sie auf der rechten Seite des Fensters
+die kopierten Dateien sehen.
+
+image::VM_remote_08.jpg[]
+
+//<<<
+
+=== Remotezugriff via Putty um auf der Konsole zu Arbeiten
+
+Die Konfiguration einer Sitzung in `PuTTY` ist ebenso einfach wie in `WinSCP`.
+Klicken Sie im linken Fensterbereich auf 'Session', tragen Sie in das Feld
+'Host Name' +user@127.0.0.1+ ein und wählen Sie bei 'Connection type' +SSH+.
+Wenn Sie diese Einstellungen speichern möchten, so können Sie in das Feld
+'Saved Sessions' der Sitzung einen Namen geben und mit 'Save' speichern. Mit
+der Schaltfläche 'Open' Starten Sie die Sitzung.
+
+image::VM_ssh_01.jpg[]
+
+<<<
+
+Wie schon zuvor bei `WinSCP` werden Sie auch hier beim ersten
+Verbindgungsaufbau darüber informiert, dass `PuTTY` den Remote-Rechner noch
+nicht kennt. Und genauso wie bei `WinSCP` können Sie auch dieses Fenster mit
+'Ja' wegklicken.
+
+image::VM_ssh_02.jpg[]
+
+
+Schlussendlich werden Sie noch nach dem Passwort ('abc123') gefragt.
+
+image::VM_ssh_03.jpg[]
+
+Nach erfolgreicher Eingabe des Passworts sehen Sie die gewohnte Linux Konsole.
+
+<<<<
+
+== Zugriff über den Browser des Hostrechners
+
+Über die Adresse http://127.0.0.1:8001[] erhalten Sie eine Kurzanleitung für
+die Arbeit mit dieser virtuellen Maschine (z.B. wie Sie die Übungen Bearbeiten
+und Abgeben können).
+
+image::VM_web_00.jpg[]
+
+Einige Tools die Sie im Verlauf der Vorlesung ``Testing und Debugging'' kennen
+lernen werden erzeugen HTML-Seiten als Ausgaben. Damit Sie diese Dateien nicht
+erst umständlich auf den Host-Rechner kopieren müssen um Sie im Browser zu
+betrachten, läuft auf der virtuellen Maschine ein Webserver.
+
+Freigegeben ist das Verzeichnis +/home/user/project+ mit all seinen
+Unterverzeichnissen.
+
+Auf den Hostrechner können Sie mit dem Browser über die Adresse
+http://127.0.0.1:8001/project[] darauf zugreifen.
+
+image::VM_web_01.jpg[]
+
+<<<
+
+== Benutzung von IPython
+
+Um die interaktiven Beispiele aus der Vorlesung selbst noch einmal
+durcharbeiten zu können ist das Programm 'IPython' vorinstalliert.  Im 'WinSCP'
+Beispiel haben Sie bereits gesehen, wie die Datei +vorlesung01.zip+ auf die
+virtuelle Maschine kopiert wurde.  Wechsel Sie mit +cd project+ in das
+Verzeichnis +/home/student/project+ und entpacken Sie das Archiv mit:
+
+====
+++unzip vorlesung01.zip++
+====
+
+image::VM_web_02.jpg[]
+
+//<<<
+
+Die Dateien mit der Endung +.ipynb+ enthalten die jeweiligen Sitzungen.
+Es ist wichtig, dass Sie sic vor dem Starten von `IPython` in dem Verzeichnis
+mit den jeweiligen Sitzungsdateien befinden (hier:
++/home/student/project/vorlesung01+). `IPython` starten Sie nun mit dem
+Kommando
+
+====
+++ipython notebook --ip=*++
+====
+
+image::VM_web_03.jpg[]
+
+<<<
+
+Auf dem Host-Rechner rufen Sie nun im Browser die Adresse
+http://127.0.0.1:8888[] auf und erhalten untenstehende Ausgabe.
+
+image::VM_web_04.jpg[]
+
+Klicken Sie beispielsweise auf 'MyQueue_all_examples.ipynb', so erhalten Sie
+die folgende Anzeige.
+
+image::VM_web_05.jpg[]
+
+<<<
+
+== Richtiges Herunterfahren der virtuellen Maschine
+
+Genauso, wie Sie Ihren Host-Rechner nicht ``hart'' ausschalten sollten, sollten
+Sie auch die virtuelle Maschine vor dem Ausschalten herunterfahren.
+Sie haben dafür mehrere Möglichkeiten.
+
+Sie können das Fenster der virtuellen Maschine mit der 'X' Schaltfläche
+schließen. Es öffnet sich nun ein Fenster in dem Sie den Punkt 'die virtuelle
+Maschine mittels ACPI-Event herunterfahren' auswählen und auf 'OK' klicken.
+
+image::VM_stop_00.jpg[]
+
+Sie können im Fenster der virtuellen Maschine den Menüpunkt 'Maschine' ->
+'Ausschalten per ACPI' wählen.
+
+image::VM_stop_01.jpg[]
+
+<<<
+
+Oder Sie können in der Linux Konsole den Befehl
+
+====
+++sudo shutdown -h now++
+====
+
+absetzen und anschließend das Benutzer-Passwort eingeben.
+
+image::VM_stop_02.jpg[]
+
+== Noch Fragen?
+
+Schicken Sie eine Mail mit Ihrer Frage an sebastian.stigler@htw-aalen.de
+Betreff: 'Frage zur virtuellen Maschine'.
+
+////
+vim: set syntax=asciidoc spell ft=asciidoc:
+////
